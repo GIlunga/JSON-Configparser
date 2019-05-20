@@ -1,4 +1,6 @@
 # JSON-Configparser
+[![Build status](https://dev.azure.com/guiilunga/JSON-Configparser/_apis/build/status/GIlunga.JSON-Configparser)](https://dev.azure.com/guiilunga/JSON-Configparser/_build?definitionId=-1)
+
 This python package enables the usage of JSON files as configuration files that can be properly validated.
 
 The examples folder contains examples of using this package.
