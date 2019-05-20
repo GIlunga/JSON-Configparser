@@ -27,6 +27,9 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+    pip install pytest-azurepipelines
+  displayName: 'install pytest-azurepipelines'
+
+- task: Bash@3
+  inputs:
+    filePath: 'tests/run_tests.sh'
