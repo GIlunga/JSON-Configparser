@@ -1,0 +1,13 @@
+{
+  "words": ["hello", "world", "I", "am", "Python", "notproperlytokenizedlongword"],
+  "max_size": 10,
+  "fail": false,
+  "translation": {
+    "hello": "Ola",
+    "world": "mundo",
+    "I": "eu",
+    "am": "sou",
+    "Python": "Python",
+    "notproperlytokenizedlongword": "notproperlytokenizedlongword"
+  }
+}
