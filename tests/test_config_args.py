@@ -1,7 +1,7 @@
 import pytest
 
 import json_configparser
-from data import option_defs
+from .data import option_defs
 
 
 valid_bounds_lst = [json_configparser.Bounds("a1", lower_bound=0, upper_bound=10),
