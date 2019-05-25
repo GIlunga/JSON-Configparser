@@ -1,20 +1,30 @@
-.. JSON-Configparser documentation master file, created by
-   sphinx-quickstart on Fri May 24 17:24:23 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to JSON-Configparser's documentation!
 =============================================
 
+JSON-Configparser is a Python package which enables the usage of JSON files as configuration files which are validated.
+The main goals of the package are avoiding having to write validation code several times and enabling the usage of JSON
+files as configurations files.
+
+The package allows parsing several different datatypes from a JSON file:
+
+- integers
+- floats
+- strings
+- booleans
+- lists
+- dictionaries (with string keys)
+- lists/dictionaries of the other types
+
+Besides validating datatypes, it also validates bounds and extra user-defined constraints.
+
+For understanding how to use the package, please check the :doc:`getstarted` and :doc:`examples` pages.
+The full API (both public and private) is in the :doc:`api` page.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :hidden:
 
+   getstarted
+   examples
+   api
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
