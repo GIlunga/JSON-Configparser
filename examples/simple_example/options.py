@@ -15,7 +15,7 @@ bounds = [json_configparser.Bounds("max_size", lower_bound=1)]
 def extra_validations(args_dict):
     for word in args_dict["words"]:
         if word not in args_dict["translation"]:
-            raise ValueError
+            raise ValueError("Unknown word: {}".format(word))
 
 
 def create_options_object(path_to_json):
