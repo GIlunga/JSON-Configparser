@@ -22,3 +22,8 @@ The examples folder contains examples of using this package.
 - Parse a configuration file, returning an object with attributes or a dictionary
 - All types, bounds, and defaults are validated by the package
     
+## List of TODOs
+- Recognize when an integer given to a float argument is valid (e.g., passing 0 to a float argument should not fail)
+- Optionally pass a copy of the arguments dictionary to the extra validations function, to allow or not changing the parameters
+- Improve function names
+- Improve the creation of Bounds
