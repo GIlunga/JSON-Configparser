@@ -216,7 +216,8 @@ class ConfigArgs(object):
                                  "was given".format(arg_name))
 
             elif arg_name in loaded_args:
-                validations.validate_argument(loaded_args[arg_name], self.type_default_bounds_dict[arg_name])
+                loaded_args[arg_name] = validations.validate_argument(loaded_args[arg_name],
+                                                                      self.type_default_bounds_dict[arg_name])
 
         if len(loaded_args) != len(self.arg_names):
             for arg_name in loaded_args:

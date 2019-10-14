@@ -29,16 +29,21 @@ invalid_bounds_obj = bounds.Bounds("a", lower_bound=0, upper_bound=1)
 
 @pytest.mark.parametrize("value_typedef", [(True, default_bool),
                                            (10, default_int),
+                                           (10, default_float),
                                            (10.5, default_float),
                                            ("abc", default_str),
                                            ([1, 2], default_list_int),
+                                           ([1, 2], default_list_float),
                                            ([1.5, 2.5], default_list_float),
+                                           ([1, 2.5], default_list_float),
                                            (["ab", "cd"], default_list_str),
                                            ([True, False], default_list_bool),
                                            ([[1, 2], [3, 4]], default_list_list_int),
                                            ([{"a": 1, "b": 2}, {"a": 5, "b": 4}], default_list_dict),
                                            ({"a": 1, "b": 2}, default_dict_int),
                                            ({"a": 1.5, "b": 2.5}, default_dict_float),
+                                           ({"a": 1, "b": 2}, default_dict_float),
+                                           ({"a": 1, "b": 2.5}, default_dict_float),
                                            ({"a": "a", "b": "b"}, default_dict_str),
                                            ({"a": True, "b": False}, default_dict_bool),
                                            ({"a": {"a": 1}, "b": {"b": 2}}, default_dict_dict_int),
@@ -83,16 +88,13 @@ def test_valid_with_defaults(value_typedef):
 
 
 @pytest.mark.parametrize("value_typedef", [(True, default_str),
-                                           (10, default_float),
                                            (10.5, default_int),
                                            ("abc", default_bool),
                                            (5, default_list_int),
-                                           ([1, 2], default_list_float),
                                            ([1.5, 2.5], default_list_int),
                                            (["ab", "cd"], default_list_bool),
                                            ([True, False], default_list_str),
                                            (5, default_dict_int),
-                                           ({"a": 1, "b": 2}, default_dict_float),
                                            ({"a": 1.5, "b": 2.5}, default_dict_int),
                                            ({"a": "a", "b": "b"}, default_dict_bool),
                                            ({"a": True, "b": False}, default_dict_str)])
@@ -135,11 +137,9 @@ def test_empty_values(value_typedef):
 
 
 @pytest.mark.parametrize("value_typedef", [([1, 2.5], default_list_int),
-                                           ([1, 2.5], default_list_float),
                                            ([[1, 2], [1.5, 2.5]], default_list_list_int),
                                            (["a", 2], default_str),
                                            ({"a": 1, "b": 2.5}, default_dict_int),
-                                           ({"a": 1, "b": 2.5}, default_dict_float),
                                            ({"a": "1", "b": 2.5}, default_dict_str)])
 def test_mixed_types(value_typedef):
     value, typedef = value_typedef
@@ -160,3 +160,19 @@ def test_unknown_types(value_typedef):
     value, typedef = value_typedef
     with pytest.raises(TypeError):
         validations.validate_argument(value, typedef)
+
+
+@pytest.mark.parametrize("value,typedef,expected", [(1.0, type_defaults.TypeDefaultBounds("a", int), 1),
+                                                    (1.5, type_defaults.TypeDefaultBounds("b", int), None)])
+def test_float_value_int_arg(value, typedef, expected):
+    if expected is not None:
+        assert expected == validations.validate_argument(value, typedef)
+    else:
+        with pytest.raises(TypeError):
+            validations.validate_argument(value, typedef)
+
+
+@pytest.mark.parametrize("value,typedef, expected", [(1, type_defaults.TypeDefaultBounds("a", float), 1.0),
+                                                     (1.5, type_defaults.TypeDefaultBounds("b", float), 1.5)])
+def test_int_value_float_arg(value, typedef, expected):
+    assert expected == validations.validate_argument(value, typedef)
