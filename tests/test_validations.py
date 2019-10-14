@@ -160,3 +160,9 @@ def test_unknown_types(value_typedef):
     value, typedef = value_typedef
     with pytest.raises(TypeError):
         validations.validate_argument(value, typedef)
+
+
+def test_float_value_int_arg():
+    typedef = type_defaults.TypeDefaultBounds("a", int)
+
+    validations.validate_argument(1.0, typedef)
