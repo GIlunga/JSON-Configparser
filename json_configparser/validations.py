@@ -1,9 +1,23 @@
+"""
+This module implements the type and bound validation of all supported types.
+"""
+
 from typing import Any
 
 from . import type_defaults
 
 
 def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds):
+    """
+    Given a value and type/bounds, this function checks if the type is supported.
+    If so, then check if the value is of the correct type and if it is within the defined bounds.
+    For Lists and Dictionaries these checks are applied to all elements.
+
+    :param arg_value: The value of the argument to check.
+    :param arg_type_defaults: An instance of TypeDefaultBounds, specifying the type and bounds of the argument to check.
+    :raises ValueError: If the argument is an empty string.
+    :raises TypeError: If the argument value is not of the expected type.
+    """
     if arg_type_defaults.type_ == bool:
         if not isinstance(arg_value, bool):
             raise TypeError("The {name} argument should be a boolean "
@@ -22,6 +36,7 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
         if not isinstance(arg_value, str):
             raise TypeError("The {name} argument should be a string "
                             "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
+        # TODO: Consider allowing empty strings
         if not len(arg_value.strip()) > 0:
             raise ValueError("The {name} argument should be a non empty string "
                              "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))

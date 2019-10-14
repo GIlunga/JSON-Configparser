@@ -1,10 +1,29 @@
+"""
+The Bounds module implements the Bounds class, which can be used to represent bounds for certain arguments.
+"""
+
 from typing import Union
 
 
 class Bounds(object):
+    """
+    Represents the Bounds of an argument.
+    A Bounds instance is defined by lower and upper bounds, and flags indicating if the bounds are inclusive or
+    exclusive.
+    The supported argument types are integer, float, or lists/dictionaries of those types.
+    """
+    # TODO: The validation that the argument type supports Bounds should be done in the __init__
     def __init__(self, arg_name: str, lower_bound: Union[int, float, None]=None, lower_inclusive: bool=True,
                  upper_bound: Union[int, float, None]=None, upper_inclusive: bool=True):
+        """
+        At least one bound must be provided.
 
+        :param arg_name: The name of the argument.
+        :param lower_bound: The lower bound value.
+        :param lower_inclusive: Flag indicating if the lower bound is inclusive.
+        :param upper_bound: The upper bound value.
+        :param upper_inclusive: Flag indicating if the lower bound is inclusive.
+        """
         self._validate_init_args(arg_name, lower_bound, lower_inclusive, upper_bound, upper_inclusive)
 
         self.arg_name = arg_name
@@ -44,6 +63,12 @@ class Bounds(object):
                              "(lower_bound: {}, upper_bound: {})".format(lower_bound, upper_bound))
 
     def validate_value(self, arg_value: Union[int, float]):
+        """
+        Validates a value against the provided bounds.
+
+        :param arg_value: The value of the argument to validate.
+        :raises ValueError: If the value is out of bounds.
+        """
         if self.lower_bound is not None:
             if self.lower_inclusive and arg_value < self.lower_bound:
                 raise ValueError("The {name} argument should be greater than or "

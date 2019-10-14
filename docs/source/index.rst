@@ -18,7 +18,7 @@ The package allows parsing several different datatypes from a JSON file:
 Besides validating datatypes, it also validates bounds and extra user-defined constraints.
 
 For understanding how to use the package, please check the :doc:`getstarted` and :doc:`examples` pages.
-The full API (both public and private) is in the :doc:`api` page.
+The API is in the :doc:`api` page.
 
 The package is available on `PyPI <https://pypi.org/project/json-configparser/>`_ (currently supports Python 3.6 only).
 To install the latest version, run the following command: :code:`pip install json-configparser`
