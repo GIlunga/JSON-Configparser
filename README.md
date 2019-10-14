@@ -24,7 +24,6 @@ The examples folder contains examples of using this package.
 - All types, bounds, and defaults are validated by the package
     
 ## List of TODOs
-- Recognize when an integer given to a float argument is valid (e.g., passing 0 to a float argument should not fail)
 - Optionally pass a copy of the arguments dictionary to the extra validations function, to allow or not changing the parameters
 - Ignore or fail with extra arguments in the JSON
 - Add test to build docs

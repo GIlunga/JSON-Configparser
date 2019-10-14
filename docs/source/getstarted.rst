@@ -35,6 +35,9 @@ Each argument must have a type. Valid types are:
 * :code:`List[x]` where x is any other valid type, including lists and dictionaries
 * :code:`Dict[str, x]` where x is any other valid type, including lists and dictionaries
 
+There are certain exceptions during validation: 10.0 is an accepted value for integer arguments and 10 is accepted for
+float arguments.
+
 Besides types, defaults can also be defined (arg5 in the example is given a default value of True).
 Every argument defined in the NamedTuple must be given a value in the JSON file, unless it is given a default value.
 Default values are also type checked by the library. If a default value is given and a value is also found in the JSON,

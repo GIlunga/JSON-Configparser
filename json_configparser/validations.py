@@ -7,7 +7,7 @@ from typing import Any
 from . import type_defaults
 
 
-def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds):
+def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds) -> Any:
     """
     Given a value and type/bounds, this function checks if the type is supported.
     If so, then check if the value is of the correct type and if it is within the defined bounds.
@@ -27,7 +27,10 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
         if not isinstance(arg_value, arg_type_defaults.type_):
             # Allow 10.0 for integer arguments
             if arg_type_defaults.type_ == int and isinstance(arg_value, float) and float(int(arg_value)) == arg_value:
-                return
+                return int(arg_value)
+            # Allow 10 for float arguments
+            elif arg_type_defaults.type_ == float and isinstance(arg_value, int):
+                return float(arg_value)
 
             raise TypeError("The {name} argument should be a {type_} "
                             "({name}: {value})".format(name=arg_type_defaults.arg_name,
@@ -50,16 +53,18 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
         raise TypeError("Unknown type {} for {} argument".format(arg_type_defaults.type_, arg_type_defaults.arg_name))
 
     elif arg_type_defaults.type_.__orig_bases__[0] == list:
-        _validate_list(arg_value, arg_type_defaults)
+        return _validate_list(arg_value, arg_type_defaults)
 
     elif arg_type_defaults.type_.__orig_bases__[0] == dict:
-        _validate_dict(arg_value, arg_type_defaults)
+        return _validate_dict(arg_value, arg_type_defaults)
 
     else:
         raise TypeError("Unknown type {} for argument {}".format(arg_type_defaults.type_, arg_type_defaults.arg_name))
 
+    return arg_value
 
-def _validate_list(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds):
+
+def _validate_list(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds) -> Any:
     if not isinstance(arg_value, list):
         raise TypeError("The {name} argument should be a list "
                         "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
@@ -79,12 +84,15 @@ def _validate_list(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultB
         raise TypeError("The {name} argument should be a list of {type_}, but it is an empty "
                         "list.".format(name=arg_type_defaults.arg_name, type_=inner_type))
 
+    new_lst = []
     for el in arg_value:
         el_type_defaults = type_defaults.TypeDefaultBounds(el_name, inner_type, bound_obj=arg_type_defaults.bound_obj)
-        validate_argument(el, el_type_defaults)
+        new_lst.append(validate_argument(el, el_type_defaults))
+
+    return new_lst
 
 
-def _validate_dict(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds):
+def _validate_dict(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultBounds) -> Any:
     if not isinstance(arg_value, dict):
         raise TypeError("The {name} argument should be a dict "
                         "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
@@ -110,8 +118,11 @@ def _validate_dict(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultB
         raise TypeError("The {name} argument should be a dict of {type_}, but it is an empty "
                         "dict.".format(name=arg_type_defaults.arg_name, type_=inner_type))
 
+    new_dict = {}
     for key in arg_value:
         key_type_defaults = type_defaults.TypeDefaultBounds(key_name, str)
         el_type_defaults = type_defaults.TypeDefaultBounds(el_name + key, inner_type, bound_obj=arg_type_defaults.bound_obj)
         validate_argument(key, key_type_defaults)
-        validate_argument(arg_value[key], el_type_defaults)
+        new_dict[key] = validate_argument(arg_value[key], el_type_defaults)
+
+    return new_dict
