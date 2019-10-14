@@ -25,6 +25,10 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
 
     elif arg_type_defaults.type_ == int or arg_type_defaults.type_ == float:
         if not isinstance(arg_value, arg_type_defaults.type_):
+            # Allow 10.0 for integer arguments
+            if arg_type_defaults.type_ == int and isinstance(arg_value, float) and float(int(arg_value)) == arg_value:
+                return
+
             raise TypeError("The {name} argument should be a {type_} "
                             "({name}: {value})".format(name=arg_type_defaults.arg_name,
                                                        type_=arg_type_defaults.type_,
