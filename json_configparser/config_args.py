@@ -210,6 +210,8 @@ class ConfigArgs(object):
         with open(path_to_json, "r", encoding=encoding) as f:
             loaded_args = json.load(f)
 
+        # TODO: keep list of json keys, remove from it when iterating and check again
+
         for arg_name in self.arg_names:
             if arg_name not in loaded_args and not self.type_default_bounds_dict[arg_name].has_default:
                 raise ValueError("Argument {} was not provided in the JSON file and no default "
@@ -225,6 +227,7 @@ class ConfigArgs(object):
                     logging.warning("Unknown argument {}. Ignoring".format(arg_name))
 
         # Check extra validations
+        # TODO: If option is true, then store the new loaded args?
         if self.extra_validations is not None:
             self.extra_validations(loaded_args)
 
