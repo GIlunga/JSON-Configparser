@@ -90,3 +90,10 @@ def test_valid_options_invalid_json(options_json):
 
     with pytest.raises(TypeError):
         args_object.parse_json(json)
+
+
+def test_unknown_json_args():
+    args_object = json_configparser.ConfigArgs(option_defs.OptionsOnly)
+
+    with pytest.raises(ValueError):
+        args_object.parse_json("tests/data/unknown_args.json")

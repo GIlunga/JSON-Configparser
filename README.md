@@ -25,10 +25,10 @@ The examples folder contains examples of using this package.
     
 ## List of TODOs
 - Optionally pass a copy of the arguments dictionary to the extra validations function, to allow or not changing the parameters
-- Ignore or fail with extra arguments in the JSON
 - Add test to build docs
 - Implement 3.7 version
 - Implement compatibility with 3.7 dataclasses
 - Improve tests
 - Improve function names
 - Improve the creation of Bounds
+- Allow command line interaction, e.g., when running a script pass the path to the json and new values for some arguments
