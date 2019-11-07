@@ -43,6 +43,9 @@ Every argument defined in the NamedTuple must be given a value in the JSON file,
 Default values are also type checked by the library. If a default value is given and a value is also found in the JSON,
 then the value in the JSON is used.
 
+If the JSON contains unknown arguments, i.e., arguments not defined in the NamedTuple, then a ValueError is raised.
+
+
 ===================
 Defining the Bounds
 ===================

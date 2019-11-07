@@ -26,6 +26,7 @@ The examples folder contains examples of using this package.
 ## List of TODOs
 - Optionally pass a copy of the arguments dictionary to the extra validations function, to allow or not changing the parameters
 - Add test to build docs
+- Add Flake8 to CI
 - Implement 3.7 version
 - Implement compatibility with 3.7 dataclasses
 - Improve tests

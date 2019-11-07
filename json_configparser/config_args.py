@@ -204,7 +204,8 @@ class ConfigArgs(object):
         :param path_to_json: Path to JSON configuration file.
         :param encoding: The encoding to use when loading the JSON file.
         :return: A Dictionary mapping argument name to value.
-        :raises ValueError: If an argument is an empty string or if an argument with no default is missing from the JSON.
+        :raises ValueError: If an argument is an empty string, if an argument with no default is missing from the JSON,
+                            or if the JSON contains an unknown argument.
         :raises TypeError: If an argument is of the wrong type.
         """
         with open(path_to_json, "r", encoding=encoding) as f:
@@ -226,7 +227,6 @@ class ConfigArgs(object):
             raise ValueError("Unknown arguments provided in the JSON file: {}".format(json_arg_names))
 
         # Check extra validations
-        # TODO: If option is true, then store the new loaded args?
         if self.extra_validations is not None:
             self.extra_validations(loaded_args)
 
