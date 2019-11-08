@@ -1,4 +1,4 @@
-from typing import NamedTuple, List, Dict
+from typing import NamedTuple, List, Dict, Any
 import json_configparser
 
 
@@ -12,13 +12,13 @@ class Options(NamedTuple):
 bounds = [json_configparser.Bounds("max_size", lower_bound=1)]
 
 
-def extra_validations(args_dict):
+def extra_validations(args_dict: Dict[str, Any]):
     for word in args_dict["words"]:
         if word not in args_dict["translation"]:
             raise ValueError("Unknown word: {}".format(word))
 
 
-def create_options_object(path_to_json):
+def create_options_object(path_to_json: str) -> Options:
     args_object = json_configparser.ConfigArgs(Options, bounds, extra_validations)
     dict_args = args_object.parse_json(path_to_json)
     return Options(**dict_args)

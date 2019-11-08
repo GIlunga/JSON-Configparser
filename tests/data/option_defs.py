@@ -1,4 +1,4 @@
-from typing import NamedTuple, List, Dict
+from typing import NamedTuple, List, Dict, Any
 
 
 class OptionsOnly(NamedTuple):
@@ -37,3 +37,15 @@ class OptionsDefaults(NamedTuple):
     a14: List[Dict[str, int]] = [{"a": 5, "b": 5}, {"a": 5, "b": 5}]
     a15: Dict[str, Dict[str, int]] = {"a": {"a": 5, "b": 5}, "b": {"a": 5, "b": 5}}
     a16: Dict[str, List[int]] = {"a": [1, 2], "b": [3, 4]}
+
+
+def valid_extra_vals(args_dict: Dict[str, Any]):
+    if args_dict["a1"] + args_dict["a2"] <= 0:
+        raise ValueError("a1 + a2 must be larger than zero!")
+
+
+def valid_extra_vals_valid_return(args_dict: Dict[str, Any]):
+    if args_dict["a1"] + args_dict["a2"] <= 0:
+        raise ValueError("a1 + a2 must be larger than zero!")
+
+    return args_dict

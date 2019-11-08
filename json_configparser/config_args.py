@@ -3,8 +3,8 @@ Implements the ConfigArgs class which is the main class for parsing options clas
 a JSON file.
 """
 
+import copy
 import inspect
-import logging
 import json
 from typing import List, Callable, Union, Dict, Any, Set
 
@@ -27,7 +27,7 @@ class ConfigArgs(object):
         :param options_class: The NamedTuple class which defines all arguments, types, and defaults.
         :param bounds_lst: A list of Bounds objects, which defines bounds for arguments.
         :param extra_validations: A function which contains extra validations. Should receive a dictionary mapping from
-                                  argument name to value.
+                                  argument name to value and should return a dictionary of the same type.
         """
         self._validate_init_args(options_class, bounds_lst, extra_validations)
 
@@ -228,6 +228,8 @@ class ConfigArgs(object):
 
         # Check extra validations
         if self.extra_validations is not None:
-            self.extra_validations(loaded_args)
+            returned_args = self.extra_validations(copy.deepcopy(loaded_args))
+            if returned_args is not None and isinstance(returned_args, dict):
+                loaded_args = returned_args
 
         return loaded_args

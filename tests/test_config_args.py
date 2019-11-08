@@ -97,3 +97,9 @@ def test_unknown_json_args():
 
     with pytest.raises(ValueError):
         args_object.parse_json("tests/data/unknown_args.json")
+
+
+@pytest.mark.parametrize("val_f", [option_defs.valid_extra_vals, option_defs.valid_extra_vals_valid_return])
+def test_valid_extra_validations(val_f):
+    args_object = json_configparser.ConfigArgs(option_defs.OptionsOnly, extra_validations=val_f)
+    args_object.parse_json("tests/data/valid.json")
