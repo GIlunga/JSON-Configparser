@@ -27,7 +27,7 @@ steps:
 - script: |
     pip install pytest-azurepipelines
   displayName: 'install pytest-azurepipelines'
-- script: tox
+- script: tox -e py
   displayName: Install package and run tests
 
 - task: PublishTestResults@2
