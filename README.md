@@ -24,8 +24,6 @@ The examples folder contains examples of using this package.
 - All types, bounds, and defaults are validated by the package
     
 ## List of TODOs
-- Add Flake8 to CI
-- Handle existing code TODOs
 - Implement 3.7 version
 - Implement compatibility with 3.7 dataclasses
 - Improve tests
