@@ -191,12 +191,10 @@ def test_invalid_bounds(value_typedef):
                                            ({}, default_dict_float),
                                            ({}, default_dict_str),
                                            ({}, default_dict_bool),
-                                           ([{}], default_list_dict),
-                                           ("", default_str)])
+                                           ([{}], default_list_dict)])
 def test_empty_values(value_typedef):
     value, typedef = value_typedef
-    error = TypeError if value != "" else ValueError
-    with pytest.raises(error):
+    with pytest.raises(TypeError):
         validations.validate_argument(value, typedef)
 
 

@@ -176,13 +176,9 @@ class ConfigArgs(object):
             try:
                 validations.validate_argument(default_value, type_def)
             except ValueError:
-                # Empty strings are ok
-                if default_value == "":
-                    continue
-                else:
-                    raise ValueError("Invalid default value for {name} argument with bound {bound} "
-                                     "(default: {value})".format(name=arg_name, bound=arg_bounds_dict[arg_name],
-                                                                 value=default_value))
+                raise ValueError("Invalid default value for {name} argument with bound {bound} "
+                                 "(default: {value})".format(name=arg_name, bound=arg_bounds_dict[arg_name],
+                                                             value=default_value))
             except TypeError:
                 # allow none or empty for lists and dicts
                 if hasattr(arg_types_dict[arg_name], "__orig_bases__"):
