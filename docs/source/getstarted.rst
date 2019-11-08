@@ -43,6 +43,9 @@ Every argument defined in the NamedTuple must be given a value in the JSON file,
 Default values are also type checked by the library. If a default value is given and a value is also found in the JSON,
 then the value in the JSON is used.
 
+If the JSON contains unknown arguments, i.e., arguments not defined in the NamedTuple, then a ValueError is raised.
+
+
 ===================
 Defining the Bounds
 ===================
@@ -76,7 +79,9 @@ Then, this function can perform checks and raise Errors if an argument is invali
 In this case arg4 is a dictionary of booleans which cannot be all True. When parsing the JSON, if all True values are given,
 the ValueError will be thrown by the library.
 
-This function should not change the values in the dictionary, only check them and raise Errors.
+This function can also be used to change the values and return a dictionary. However the new values are never
+checked, so in general this approach is not recommended. Directly changing the args dictionary in this function does
+not change the final arguments. To do so, the dictionary must be returned by the function.
 
 ================
 Parsing the JSON

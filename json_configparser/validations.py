@@ -23,6 +23,11 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
             raise TypeError("The {name} argument should be a boolean "
                             "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
 
+    elif arg_type_defaults.type_ == str:
+        if not isinstance(arg_value, str):
+            raise TypeError("The {name} argument should be a string "
+                            "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
+
     elif arg_type_defaults.type_ == int or arg_type_defaults.type_ == float:
         if not isinstance(arg_value, arg_type_defaults.type_):
             # Allow 10.0 for integer arguments
@@ -38,15 +43,6 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
                                                        value=arg_value))
         if arg_type_defaults.bound_obj is not None:
             arg_type_defaults.bound_obj.validate_value(arg_value)
-
-    elif arg_type_defaults.type_ == str:
-        if not isinstance(arg_value, str):
-            raise TypeError("The {name} argument should be a string "
-                            "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
-        # TODO: Consider allowing empty strings
-        if not len(arg_value.strip()) > 0:
-            raise ValueError("The {name} argument should be a non empty string "
-                             "({name}: {value})".format(name=arg_type_defaults.arg_name, value=arg_value))
 
     # All other expected types (List[x] and Dict[x]) must have this attribute
     elif not hasattr(arg_type_defaults.type_, "__orig_bases__"):
@@ -121,7 +117,8 @@ def _validate_dict(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultB
     new_dict = {}
     for key in arg_value:
         key_type_defaults = type_defaults.TypeDefaultBounds(key_name, str)
-        el_type_defaults = type_defaults.TypeDefaultBounds(el_name + key, inner_type, bound_obj=arg_type_defaults.bound_obj)
+        el_type_defaults = type_defaults.TypeDefaultBounds(el_name + key, inner_type,
+                                                           bound_obj=arg_type_defaults.bound_obj)
         validate_argument(key, key_type_defaults)
         new_dict[key] = validate_argument(arg_value[key], el_type_defaults)
 

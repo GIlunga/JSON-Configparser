@@ -3,8 +3,8 @@ Implements the ConfigArgs class which is the main class for parsing options clas
 a JSON file.
 """
 
+import copy
 import inspect
-import logging
 import json
 from typing import List, Callable, Union, Dict, Any, Set
 
@@ -21,13 +21,13 @@ class ConfigArgs(object):
     The parse_json method can be used to parse a JSON file and validate it against the known information.
     """
     # TODO: Improve names
-    def __init__(self, options_class: type, bounds_lst: Union[List[bounds.Bounds], None]=None,
-                 extra_validations: Union[Callable, None]=None):
+    def __init__(self, options_class: type, bounds_lst: Union[List[bounds.Bounds], None] = None,
+                 extra_validations: Union[Callable, None] = None):
         """
         :param options_class: The NamedTuple class which defines all arguments, types, and defaults.
         :param bounds_lst: A list of Bounds objects, which defines bounds for arguments.
         :param extra_validations: A function which contains extra validations. Should receive a dictionary mapping from
-                                  argument name to value.
+                                  argument name to value and should return a dictionary of the same type.
         """
         self._validate_init_args(options_class, bounds_lst, extra_validations)
 
@@ -38,8 +38,8 @@ class ConfigArgs(object):
         self.arg_names, self.type_default_bounds_dict = self._create_type_default_bounds_dict()
 
     @staticmethod
-    def _validate_init_args(options_class: type, bounds_lst: Union[List[bounds.Bounds], None]=None,
-                            extra_validations: Union[Callable, None]=None):
+    def _validate_init_args(options_class: type, bounds_lst: Union[List[bounds.Bounds], None] = None,
+                            extra_validations: Union[Callable, None] = None):
         # Cannot check if NamedTuple directly
         if not isinstance(options_class, type):
             raise TypeError("The options_class parameter should be the typing NamedTuple Class itself "
@@ -73,7 +73,8 @@ class ConfigArgs(object):
         Parses the provided Arguments class and creates a set of argument names and a dictionary holding information
         about the type, default, and bounds of all arguments.
 
-        :return: The set of all argument names and a dictionary mapping from argument name to TypeDefaultBounds instance.
+        :return: The set of all argument names and a dictionary mapping from argument name to TypeDefaultBounds
+                 instance.
         :raises ValueError: If a bound is specified for an unknown argument. Or if a default value is out of bounds.
         :raises TypeError: If a bound is specified for an invalid type. Or if an argument has an invalid type.
                            Or if the default value is of the wrong type.
@@ -116,7 +117,6 @@ class ConfigArgs(object):
 
         return arg_names, arg_type_defaults_dict
 
-    # TODO: Does this check Dict keys are strings? It's better to fail here
     @staticmethod
     def _check_supported_types(arg_types_dict: Dict[str, type]):
         """
@@ -132,8 +132,15 @@ class ConfigArgs(object):
                 if actual_inner_type.__orig_bases__[0] not in [list, dict]:
                     raise TypeError("The type of the {name} argument is not supported "
                                     "({name}: {type_})".format(name=arg, type_=type_))
-                i = 0 if actual_inner_type.__orig_bases__[0] == list else 1
-                actual_inner_type = actual_inner_type.__args__[i]
+                if actual_inner_type.__orig_bases__[0] == list:
+                    actual_inner_type = actual_inner_type.__args__[0]
+                else:
+                    # Check dictionary keys are strings
+                    if actual_inner_type.__args__[0] != str:
+                        raise TypeError("The type of the {name} argument is not supported "
+                                        "({name}: {type_})".format(name=arg, type_=type_))
+
+                    actual_inner_type = actual_inner_type.__args__[1]
 
             if actual_inner_type not in [bool, int, float, str]:
                 raise TypeError("The type of the {name} argument is not supported "
@@ -175,13 +182,9 @@ class ConfigArgs(object):
             try:
                 validations.validate_argument(default_value, type_def)
             except ValueError:
-                # Empty strings are ok
-                if default_value == "":
-                    continue
-                else:
-                    raise ValueError("Invalid default value for {name} argument with bound {bound} "
-                                     "(default: {value})".format(name=arg_name, bound=arg_bounds_dict[arg_name],
-                                                                 value=default_value))
+                raise ValueError("Invalid default value for {name} argument with bound {bound} "
+                                 "(default: {value})".format(name=arg_name, bound=arg_bounds_dict[arg_name],
+                                                             value=default_value))
             except TypeError:
                 # allow none or empty for lists and dicts
                 if hasattr(arg_types_dict[arg_name], "__orig_bases__"):
@@ -197,35 +200,39 @@ class ConfigArgs(object):
                                                                                 arg_types_dict[arg_name]))
 
     # TODO: Implement 3.6+ version
-    def parse_json(self, path_to_json: str, encoding: str="utf-8") -> Dict[str, Any]:
+    def parse_json(self, path_to_json: str, encoding: str = "utf-8") -> Dict[str, Any]:
         """
         Parses a JSON file, reads the arguments, validates them, and returns a dictionary with them.
 
         :param path_to_json: Path to JSON configuration file.
         :param encoding: The encoding to use when loading the JSON file.
         :return: A Dictionary mapping argument name to value.
-        :raises ValueError: If an argument is an empty string or if an argument with no default is missing from the JSON.
+        :raises ValueError: If an argument is an empty string, if an argument with no default is missing from the JSON,
+                            or if the JSON contains an unknown argument.
         :raises TypeError: If an argument is of the wrong type.
         """
         with open(path_to_json, "r", encoding=encoding) as f:
             loaded_args = json.load(f)
 
+        json_arg_names = set(loaded_args.keys())
+
         for arg_name in self.arg_names:
-            if arg_name not in loaded_args and not self.type_default_bounds_dict[arg_name].has_default:
+            if arg_name not in json_arg_names and not self.type_default_bounds_dict[arg_name].has_default:
                 raise ValueError("Argument {} was not provided in the JSON file and no default "
                                  "was given".format(arg_name))
 
-            elif arg_name in loaded_args:
+            elif arg_name in json_arg_names:
+                json_arg_names.remove(arg_name)
                 loaded_args[arg_name] = validations.validate_argument(loaded_args[arg_name],
                                                                       self.type_default_bounds_dict[arg_name])
 
-        if len(loaded_args) != len(self.arg_names):
-            for arg_name in loaded_args:
-                if arg_name not in self.arg_names:
-                    logging.warning("Unknown argument {}. Ignoring".format(arg_name))
+        if len(json_arg_names) > 0:
+            raise ValueError("Unknown arguments provided in the JSON file: {}".format(json_arg_names))
 
         # Check extra validations
         if self.extra_validations is not None:
-            self.extra_validations(loaded_args)
+            returned_args = self.extra_validations(copy.deepcopy(loaded_args))
+            if returned_args is not None and isinstance(returned_args, dict):
+                loaded_args = returned_args
 
         return loaded_args

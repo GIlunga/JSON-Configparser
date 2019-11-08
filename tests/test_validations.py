@@ -53,35 +53,83 @@ def test_simple_valid_cases(value_typedef):
     validations.validate_argument(value, typedef)
 
 
-@pytest.mark.parametrize("value_typedef", [(5, type_defaults.TypeDefaultBounds("a", int, bound_obj=valid_bounds_obj)),
-                                           (5.5, type_defaults.TypeDefaultBounds("a", float, bound_obj=valid_bounds_obj)),
-                                           ([5, 5], type_defaults.TypeDefaultBounds("a", List[int], bound_obj=valid_bounds_obj)),
-                                           ([[5, 5], [5, 5]], type_defaults.TypeDefaultBounds("a", List[List[int]], bound_obj=valid_bounds_obj)),
-                                           ([5.5, 5.5], type_defaults.TypeDefaultBounds("a", List[float], bound_obj=valid_bounds_obj)),
-                                           ([[5.5, 5.5], [5.5, 5.5]], type_defaults.TypeDefaultBounds("a", List[List[float]], bound_obj=valid_bounds_obj)),
-                                           ({"a": 5, "b": 5}, type_defaults.TypeDefaultBounds("a", Dict[str, int], bound_obj=valid_bounds_obj)),
-                                           ({"a": 5.5, "b": 5.5}, type_defaults.TypeDefaultBounds("a", Dict[str, float], bound_obj=valid_bounds_obj)),
-                                           ([{"a": 5, "b": 5}, {"a": 5, "b": 5}], type_defaults.TypeDefaultBounds("a", List[Dict[str, int]], bound_obj=valid_bounds_obj)),
-                                           ({"a": {"a": 5}, "b": {"b": 5}}, type_defaults.TypeDefaultBounds("a", Dict[str, Dict[str, int]], bound_obj=valid_bounds_obj)),
-                                           ({"a": [5, 5], "b": [5, 5]}, type_defaults.TypeDefaultBounds("a", Dict[str, List[int]], bound_obj=valid_bounds_obj))])
+@pytest.mark.parametrize("value_typedef", [(5,
+                                            type_defaults.TypeDefaultBounds("a", int,
+                                                                            bound_obj=valid_bounds_obj)),
+                                           (5.5,
+                                            type_defaults.TypeDefaultBounds("a", float,
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ([5, 5],
+                                            type_defaults.TypeDefaultBounds("a", List[int],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ([[5, 5], [5, 5]],
+                                            type_defaults.TypeDefaultBounds("a", List[List[int]],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ([5.5, 5.5],
+                                            type_defaults.TypeDefaultBounds("a", List[float],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ([[5.5, 5.5], [5.5, 5.5]],
+                                            type_defaults.TypeDefaultBounds("a", List[List[float]],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ({"a": 5, "b": 5},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, int],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ({"a": 5.5, "b": 5.5},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, float],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ([{"a": 5, "b": 5}, {"a": 5, "b": 5}],
+                                            type_defaults.TypeDefaultBounds("a", List[Dict[str, int]],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ({"a": {"a": 5}, "b": {"b": 5}},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, Dict[str, int]],
+                                                                            bound_obj=valid_bounds_obj)),
+                                           ({"a": [5, 5], "b": [5, 5]},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, List[int]],
+                                                                            bound_obj=valid_bounds_obj))])
 def test_valid_with_bounds(value_typedef):
     value, typedef = value_typedef
     validations.validate_argument(value, typedef)
 
 
-@pytest.mark.parametrize("value_typedef", [(True, type_defaults.TypeDefaultBounds("a", bool, has_default=True, default_value=True)),
-                                           (10, type_defaults.TypeDefaultBounds("a", int, has_default=True, default_value=10)),
-                                           (10.5, type_defaults.TypeDefaultBounds("a", float, has_default=True, default_value=10.5)),
-                                           ("abc", type_defaults.TypeDefaultBounds("a", str, has_default=True, default_value="abc")),
-                                           ([1, 2], type_defaults.TypeDefaultBounds("a", List[int], has_default=True, default_value=[1, 2])),
-                                           ([1.5, 2.5], type_defaults.TypeDefaultBounds("a", List[float], has_default=True, default_value=[1.5, 2.5])),
-                                           ([[1, 2], [1, 2]], type_defaults.TypeDefaultBounds("a", List[List[int]], has_default=True, default_value=[[1, 2], [1, 2]])),
-                                           ([True, False], type_defaults.TypeDefaultBounds("a", List[bool], has_default=True, default_value=[True, False])),
-                                           (["ab", "cd"], type_defaults.TypeDefaultBounds("a", List[str], has_default=True, default_value=["a", "b"])),
-                                           ({"a": 1, "b": 2}, type_defaults.TypeDefaultBounds("a", Dict[str, int], has_default=True, default_value={"a": 1, "b": 2})),
-                                           ({"a": 1.5, "b": 2.5}, type_defaults.TypeDefaultBounds("a", Dict[str, float], has_default=True, default_value={"a": 1.5, "b": 2.5})),
-                                           ({"a": "a", "b": "b"}, type_defaults.TypeDefaultBounds("a", Dict[str, str], has_default=True, default_value={"a": "a", "b": "b"})),
-                                           ({"a": True, "b": False}, type_defaults.TypeDefaultBounds("a", Dict[str, bool], has_default=True, default_value={"a": True, "b": False}))])
+@pytest.mark.parametrize("value_typedef", [(True,
+                                            type_defaults.TypeDefaultBounds("a", bool, has_default=True,
+                                                                            default_value=True)),
+                                           (10,
+                                            type_defaults.TypeDefaultBounds("a", int, has_default=True,
+                                                                            default_value=10)),
+                                           (10.5,
+                                            type_defaults.TypeDefaultBounds("a", float, has_default=True,
+                                                                            default_value=10.5)),
+                                           ("abc",
+                                            type_defaults.TypeDefaultBounds("a", str, has_default=True,
+                                                                            default_value="abc")),
+                                           ([1, 2],
+                                            type_defaults.TypeDefaultBounds("a", List[int], has_default=True,
+                                                                            default_value=[1, 2])),
+                                           ([1.5, 2.5],
+                                            type_defaults.TypeDefaultBounds("a", List[float], has_default=True,
+                                                                            default_value=[1.5, 2.5])),
+                                           ([[1, 2], [1, 2]],
+                                            type_defaults.TypeDefaultBounds("a", List[List[int]], has_default=True,
+                                                                            default_value=[[1, 2], [1, 2]])),
+                                           ([True, False],
+                                            type_defaults.TypeDefaultBounds("a", List[bool], has_default=True,
+                                                                            default_value=[True, False])),
+                                           (["ab", "cd"],
+                                            type_defaults.TypeDefaultBounds("a", List[str], has_default=True,
+                                                                            default_value=["a", "b"])),
+                                           ({"a": 1, "b": 2},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, int], has_default=True,
+                                                                            default_value={"a": 1, "b": 2})),
+                                           ({"a": 1.5, "b": 2.5},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, float], has_default=True,
+                                                                            default_value={"a": 1.5, "b": 2.5})),
+                                           ({"a": "a", "b": "b"},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, str], has_default=True,
+                                                                            default_value={"a": "a", "b": "b"})),
+                                           ({"a": True, "b": False},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, bool], has_default=True,
+                                                                            default_value={"a": True, "b": False}))])
 def test_valid_with_defaults(value_typedef):
     value, typedef = value_typedef
     validations.validate_argument(value, typedef)
@@ -104,14 +152,30 @@ def test_simple_invalid_cases(value_typedef):
         validations.validate_argument(value, typedef)
 
 
-@pytest.mark.parametrize("value_typedef", [(5, type_defaults.TypeDefaultBounds("a", int, bound_obj=invalid_bounds_obj)),
-                                           (5.5, type_defaults.TypeDefaultBounds("a", float, bound_obj=invalid_bounds_obj)),
-                                           ([5, 5], type_defaults.TypeDefaultBounds("a", List[int], bound_obj=invalid_bounds_obj)),
-                                           ([[5, 5], [5, 5]], type_defaults.TypeDefaultBounds("a", List[List[int]], bound_obj=invalid_bounds_obj)),
-                                           ([5.5, 5.5], type_defaults.TypeDefaultBounds("a", List[float], bound_obj=invalid_bounds_obj)),
-                                           ({"a": 5, "b": 5}, type_defaults.TypeDefaultBounds("a", Dict[str, int], bound_obj=invalid_bounds_obj)),
-                                           ([{"a": 5, "b": 5}, {"a": 5, "b": 5}], type_defaults.TypeDefaultBounds("a", List[Dict[str, int]], bound_obj=invalid_bounds_obj)),
-                                           ({"a": 5.5, "b": 5.5}, type_defaults.TypeDefaultBounds("a", Dict[str, float], bound_obj=invalid_bounds_obj))])
+@pytest.mark.parametrize("value_typedef", [(5,
+                                            type_defaults.TypeDefaultBounds("a", int,
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           (5.5,
+                                            type_defaults.TypeDefaultBounds("a", float,
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           ([5, 5],
+                                            type_defaults.TypeDefaultBounds("a", List[int],
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           ([[5, 5], [5, 5]],
+                                            type_defaults.TypeDefaultBounds("a", List[List[int]],
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           ([5.5, 5.5],
+                                            type_defaults.TypeDefaultBounds("a", List[float],
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           ({"a": 5, "b": 5},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, int],
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           ([{"a": 5, "b": 5}, {"a": 5, "b": 5}],
+                                            type_defaults.TypeDefaultBounds("a", List[Dict[str, int]],
+                                                                            bound_obj=invalid_bounds_obj)),
+                                           ({"a": 5.5, "b": 5.5},
+                                            type_defaults.TypeDefaultBounds("a", Dict[str, float],
+                                                                            bound_obj=invalid_bounds_obj))])
 def test_invalid_bounds(value_typedef):
     value, typedef = value_typedef
     with pytest.raises(ValueError):
@@ -127,12 +191,10 @@ def test_invalid_bounds(value_typedef):
                                            ({}, default_dict_float),
                                            ({}, default_dict_str),
                                            ({}, default_dict_bool),
-                                           ([{}], default_list_dict),
-                                           ("", default_str)])
+                                           ([{}], default_list_dict)])
 def test_empty_values(value_typedef):
     value, typedef = value_typedef
-    error = TypeError if value != "" else ValueError
-    with pytest.raises(error):
+    with pytest.raises(TypeError):
         validations.validate_argument(value, typedef)
 
 
@@ -155,7 +217,8 @@ def test_mixed_types(value_typedef):
                                            ({"a": 1}, type_defaults.TypeDefaultBounds("a", Dict)),
                                            ({1: 1}, type_defaults.TypeDefaultBounds("a", Dict[int, int])),
                                            (None, type_defaults.TypeDefaultBounds("a", None)),
-                                           (default_int, type_defaults.TypeDefaultBounds("a", type_defaults.TypeDefaultBounds))])
+                                           (default_int,
+                                            type_defaults.TypeDefaultBounds("a", type_defaults.TypeDefaultBounds))])
 def test_unknown_types(value_typedef):
     value, typedef = value_typedef
     with pytest.raises(TypeError):

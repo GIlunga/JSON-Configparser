@@ -6,7 +6,7 @@ with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(name="json_configparser",
-      version="0.2.0",
+      version="0.3.0",
       description="A module that parses and validates JSON configuration files.",
       long_description=long_description,
       long_description_content_type="text/markdown",
