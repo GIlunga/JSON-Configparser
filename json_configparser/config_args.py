@@ -128,11 +128,12 @@ class ConfigArgs(object):
         """
         for arg, type_ in arg_types_dict.items():
             actual_inner_type = type_
-            while hasattr(actual_inner_type, "__orig_bases__"):
-                if actual_inner_type.__orig_bases__[0] not in [list, dict]:
+            while hasattr(actual_inner_type, "__origin__"):
+                # Check list (v3.7) and typing.List (3.6)
+                if actual_inner_type.__origin__ not in [list, dict, List, Dict]:
                     raise TypeError("The type of the {name} argument is not supported "
                                     "({name}: {type_})".format(name=arg, type_=type_))
-                if actual_inner_type.__orig_bases__[0] == list:
+                if actual_inner_type.__origin__ in [list, List]:
                     actual_inner_type = actual_inner_type.__args__[0]
                 else:
                     # Check dictionary keys are strings
