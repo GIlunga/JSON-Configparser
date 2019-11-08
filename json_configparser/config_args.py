@@ -117,7 +117,6 @@ class ConfigArgs(object):
 
         return arg_names, arg_type_defaults_dict
 
-    # TODO: Does this check Dict keys are strings? It's better to fail here
     @staticmethod
     def _check_supported_types(arg_types_dict: Dict[str, type]):
         """
@@ -133,8 +132,15 @@ class ConfigArgs(object):
                 if actual_inner_type.__orig_bases__[0] not in [list, dict]:
                     raise TypeError("The type of the {name} argument is not supported "
                                     "({name}: {type_})".format(name=arg, type_=type_))
-                i = 0 if actual_inner_type.__orig_bases__[0] == list else 1
-                actual_inner_type = actual_inner_type.__args__[i]
+                if actual_inner_type.__orig_bases__[0] == list:
+                    actual_inner_type = actual_inner_type.__args__[0]
+                else:
+                    # Check dictionary keys are strings
+                    if actual_inner_type.__args__[0] != str:
+                        raise TypeError("The type of the {name} argument is not supported "
+                                        "({name}: {type_})".format(name=arg, type_=type_))
+
+                    actual_inner_type = actual_inner_type.__args__[1]
 
             if actual_inner_type not in [bool, int, float, str]:
                 raise TypeError("The type of the {name} argument is not supported "
