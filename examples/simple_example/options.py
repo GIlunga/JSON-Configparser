@@ -22,4 +22,3 @@ def create_options_object(path_to_json: str) -> Options:
     args_object = json_configparser.ConfigArgs(Options, bounds, extra_validations)
     dict_args = args_object.parse_json(path_to_json)
     return Options(**dict_args)
-

@@ -121,7 +121,8 @@ def _validate_dict(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultB
     new_dict = {}
     for key in arg_value:
         key_type_defaults = type_defaults.TypeDefaultBounds(key_name, str)
-        el_type_defaults = type_defaults.TypeDefaultBounds(el_name + key, inner_type, bound_obj=arg_type_defaults.bound_obj)
+        el_type_defaults = type_defaults.TypeDefaultBounds(el_name + key, inner_type,
+                                                           bound_obj=arg_type_defaults.bound_obj)
         validate_argument(key, key_type_defaults)
         new_dict[key] = validate_argument(arg_value[key], el_type_defaults)
 

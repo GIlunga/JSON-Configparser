@@ -21,8 +21,8 @@ class ConfigArgs(object):
     The parse_json method can be used to parse a JSON file and validate it against the known information.
     """
     # TODO: Improve names
-    def __init__(self, options_class: type, bounds_lst: Union[List[bounds.Bounds], None]=None,
-                 extra_validations: Union[Callable, None]=None):
+    def __init__(self, options_class: type, bounds_lst: Union[List[bounds.Bounds], None] = None,
+                 extra_validations: Union[Callable, None] = None):
         """
         :param options_class: The NamedTuple class which defines all arguments, types, and defaults.
         :param bounds_lst: A list of Bounds objects, which defines bounds for arguments.
@@ -38,8 +38,8 @@ class ConfigArgs(object):
         self.arg_names, self.type_default_bounds_dict = self._create_type_default_bounds_dict()
 
     @staticmethod
-    def _validate_init_args(options_class: type, bounds_lst: Union[List[bounds.Bounds], None]=None,
-                            extra_validations: Union[Callable, None]=None):
+    def _validate_init_args(options_class: type, bounds_lst: Union[List[bounds.Bounds], None] = None,
+                            extra_validations: Union[Callable, None] = None):
         # Cannot check if NamedTuple directly
         if not isinstance(options_class, type):
             raise TypeError("The options_class parameter should be the typing NamedTuple Class itself "
@@ -73,7 +73,8 @@ class ConfigArgs(object):
         Parses the provided Arguments class and creates a set of argument names and a dictionary holding information
         about the type, default, and bounds of all arguments.
 
-        :return: The set of all argument names and a dictionary mapping from argument name to TypeDefaultBounds instance.
+        :return: The set of all argument names and a dictionary mapping from argument name to TypeDefaultBounds
+                 instance.
         :raises ValueError: If a bound is specified for an unknown argument. Or if a default value is out of bounds.
         :raises TypeError: If a bound is specified for an invalid type. Or if an argument has an invalid type.
                            Or if the default value is of the wrong type.
@@ -197,7 +198,7 @@ class ConfigArgs(object):
                                                                                 arg_types_dict[arg_name]))
 
     # TODO: Implement 3.6+ version
-    def parse_json(self, path_to_json: str, encoding: str="utf-8") -> Dict[str, Any]:
+    def parse_json(self, path_to_json: str, encoding: str = "utf-8") -> Dict[str, Any]:
         """
         Parses a JSON file, reads the arguments, validates them, and returns a dictionary with them.
 

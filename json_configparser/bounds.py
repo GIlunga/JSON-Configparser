@@ -13,8 +13,8 @@ class Bounds(object):
     The supported argument types are integer, float, or lists/dictionaries of those types.
     """
     # TODO: The validation that the argument type supports Bounds should be done in the __init__
-    def __init__(self, arg_name: str, lower_bound: Union[int, float, None]=None, lower_inclusive: bool=True,
-                 upper_bound: Union[int, float, None]=None, upper_inclusive: bool=True):
+    def __init__(self, arg_name: str, lower_bound: Union[int, float, None] = None, lower_inclusive: bool = True,
+                 upper_bound: Union[int, float, None] = None, upper_inclusive: bool = True):
         """
         At least one bound must be provided.
 
