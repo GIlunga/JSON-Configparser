@@ -68,7 +68,7 @@ def _validate_list(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultB
     # Get expected inner type of list
     inner_type = arg_type_defaults.type_.__args__[0]
     if inner_type not in [int, float, str, bool] and \
-            (not hasattr(inner_type, "__orig_bases__") or inner_type.__orig_bases__[0] not in [list, dict]):
+            (not hasattr(inner_type, "__origin__") or inner_type.__origin__ not in [list, dict, List, Dict]):
         raise TypeError("List arguments can only be List[int], List[float], List[str], List[bool], or a combination of "
                         "List of Lists/Dicts with those types "
                         "({}: {})".format(arg_type_defaults.arg_name, arg_type_defaults.type_))
@@ -101,7 +101,7 @@ def _validate_dict(arg_value: Any, arg_type_defaults: type_defaults.TypeDefaultB
     inner_type = arg_type_defaults.type_.__args__[1]
 
     if inner_type not in [int, float, str, bool] and \
-            (not hasattr(inner_type, "__orig_bases__") or inner_type.__orig_bases__[0] not in [list, dict]):
+            (not hasattr(inner_type, "__origin__") or inner_type.__origin__ not in [list, dict, List, Dict]):
         raise TypeError("Dict arguments can only be Dict[str, int], Dict[str, float], Dict[str, str], Dict[str, bool], "
                         "or a combination of Dict of Lists/Dicts with those types "
                         "({}: {})".format(arg_type_defaults.arg_name, arg_type_defaults.type_))
