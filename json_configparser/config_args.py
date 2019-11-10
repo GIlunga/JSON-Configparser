@@ -200,7 +200,6 @@ class ConfigArgs(object):
                                 "(default value: {}, expected_type: {})".format(arg_name, default_value,
                                                                                 arg_types_dict[arg_name]))
 
-    # TODO: Implement 3.6+ version
     def parse_json(self, path_to_json: str, encoding: str = "utf-8") -> Dict[str, Any]:
         """
         Parses a JSON file, reads the arguments, validates them, and returns a dictionary with them.

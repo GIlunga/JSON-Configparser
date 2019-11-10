@@ -19,7 +19,7 @@ setup(name="json_configparser",
                    "Programming Language :: Python :: 3.6"],
       keywords="configuration options",
       packages=["json_configparser"],
-      python_requires=">=3.6",
+      python_requires=">=3.6, <=3.8",
       install_requires=[],
       project_urls={"Bug Reports": "https://github.com/GIlunga/JSON-Configparser/issues",
                     "Source": "https://github.com/GIlunga/JSON-Configparser"})

@@ -24,7 +24,6 @@ The examples folder contains examples of using this package.
 - All types, bounds, and defaults are validated by the package
     
 ## List of TODOs
-- Implement 3.7 version
 - Implement compatibility with 3.7 dataclasses
 - Improve tests
 - Improve function names
