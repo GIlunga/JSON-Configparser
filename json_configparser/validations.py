@@ -2,7 +2,7 @@
 This module implements the type and bound validation of all supported types.
 """
 
-from typing import Any
+from typing import Any, List, Dict
 
 from . import type_defaults
 
@@ -45,13 +45,13 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
             arg_type_defaults.bound_obj.validate_value(arg_value)
 
     # All other expected types (List[x] and Dict[x]) must have this attribute
-    elif not hasattr(arg_type_defaults.type_, "__orig_bases__"):
+    elif not hasattr(arg_type_defaults.type_, "__origin__"):
         raise TypeError("Unknown type {} for {} argument".format(arg_type_defaults.type_, arg_type_defaults.arg_name))
 
-    elif arg_type_defaults.type_.__orig_bases__[0] == list:
+    elif arg_type_defaults.type_.__origin__ in [list, List]:
         return _validate_list(arg_value, arg_type_defaults)
 
-    elif arg_type_defaults.type_.__orig_bases__[0] == dict:
+    elif arg_type_defaults.type_.__origin__ in [dict, Dict]:
         return _validate_dict(arg_value, arg_type_defaults)
 
     else:

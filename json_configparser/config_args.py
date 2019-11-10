@@ -157,9 +157,9 @@ class ConfigArgs(object):
         :return: Boolean value indicating if the type can have bounds.
         """
         actual_inner_type = type_
-        while hasattr(actual_inner_type, "__orig_bases__"):
+        while hasattr(actual_inner_type, "__origin__"):
             # Already checked that it is a list or dict
-            i = 0 if actual_inner_type.__orig_bases__[0] == list else 1
+            i = 0 if actual_inner_type.__origin__ in [list, List] else 1
             actual_inner_type = actual_inner_type.__args__[i]
 
         return actual_inner_type in [int, float]
@@ -188,12 +188,12 @@ class ConfigArgs(object):
                                                              value=default_value))
             except TypeError:
                 # allow none or empty for lists and dicts
-                if hasattr(arg_types_dict[arg_name], "__orig_bases__"):
+                if hasattr(arg_types_dict[arg_name], "__origin__"):
                     if default_value is None:
                         continue
-                    elif arg_types_dict[arg_name].__orig_bases__[0] == list and default_value == []:
+                    elif arg_types_dict[arg_name].__origin__ in [list, List] and default_value == []:
                         continue
-                    elif arg_types_dict[arg_name].__orig_bases__[0] == dict and default_value == {}:
+                    elif arg_types_dict[arg_name].__origin__ in [dict, Dict] and default_value == {}:
                         continue
 
                 raise TypeError("Invalid type for default of the {} argument "
