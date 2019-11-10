@@ -128,11 +128,12 @@ class ConfigArgs(object):
         """
         for arg, type_ in arg_types_dict.items():
             actual_inner_type = type_
-            while hasattr(actual_inner_type, "__orig_bases__"):
-                if actual_inner_type.__orig_bases__[0] not in [list, dict]:
+            while hasattr(actual_inner_type, "__origin__"):
+                # Check list (v3.7) and typing.List (3.6)
+                if actual_inner_type.__origin__ not in [list, dict, List, Dict]:
                     raise TypeError("The type of the {name} argument is not supported "
                                     "({name}: {type_})".format(name=arg, type_=type_))
-                if actual_inner_type.__orig_bases__[0] == list:
+                if actual_inner_type.__origin__ in [list, List]:
                     actual_inner_type = actual_inner_type.__args__[0]
                 else:
                     # Check dictionary keys are strings
@@ -156,9 +157,9 @@ class ConfigArgs(object):
         :return: Boolean value indicating if the type can have bounds.
         """
         actual_inner_type = type_
-        while hasattr(actual_inner_type, "__orig_bases__"):
+        while hasattr(actual_inner_type, "__origin__"):
             # Already checked that it is a list or dict
-            i = 0 if actual_inner_type.__orig_bases__[0] == list else 1
+            i = 0 if actual_inner_type.__origin__ in [list, List] else 1
             actual_inner_type = actual_inner_type.__args__[i]
 
         return actual_inner_type in [int, float]
@@ -187,19 +188,18 @@ class ConfigArgs(object):
                                                              value=default_value))
             except TypeError:
                 # allow none or empty for lists and dicts
-                if hasattr(arg_types_dict[arg_name], "__orig_bases__"):
+                if hasattr(arg_types_dict[arg_name], "__origin__"):
                     if default_value is None:
                         continue
-                    elif arg_types_dict[arg_name].__orig_bases__[0] == list and default_value == []:
+                    elif arg_types_dict[arg_name].__origin__ in [list, List] and default_value == []:
                         continue
-                    elif arg_types_dict[arg_name].__orig_bases__[0] == dict and default_value == {}:
+                    elif arg_types_dict[arg_name].__origin__ in [dict, Dict] and default_value == {}:
                         continue
 
                 raise TypeError("Invalid type for default of the {} argument "
                                 "(default value: {}, expected_type: {})".format(arg_name, default_value,
                                                                                 arg_types_dict[arg_name]))
 
-    # TODO: Implement 3.6+ version
     def parse_json(self, path_to_json: str, encoding: str = "utf-8") -> Dict[str, Any]:
         """
         Parses a JSON file, reads the arguments, validates them, and returns a dictionary with them.

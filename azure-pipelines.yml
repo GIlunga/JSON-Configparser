@@ -3,12 +3,33 @@ pr:
 
 strategy:
   matrix:
-    linux:
+    linux_36:
       imageName: 'ubuntu-16.04'
-    mac:
+      PYTHON_VERSION: '3.6'
+    linux_37:
+      imageName: 'ubuntu-16.04'
+      PYTHON_VERSION: '3.7'
+    linux_38:
+      imageName: 'ubuntu-16.04'
+      PYTHON_VERSION: '3.8'
+    mac_36:
       imageName: 'macos-10.13'
-    windows:
+      PYTHON_VERSION: '3.6'
+    mac_37:
+      imageName: 'macos-10.13'
+      PYTHON_VERSION: '3.7'
+    mac_38:
+      imageName: 'macos-10.13'
+      PYTHON_VERSION: '3.8'
+    windows_36:
       imageName: 'vs2017-win2016'
+      PYTHON_VERSION: '3.6'
+    windows_37:
+      imageName: 'vs2017-win2016'
+      PYTHON_VERSION: '3.7'
+    windows_38:
+      imageName: 'vs2017-win2016'
+      PYTHON_VERSION: '3.8'
 
 pool:
   vmImage: $(imageName)
@@ -16,8 +37,8 @@ pool:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: 3.6
-  displayName: 'Use Python 3.6'
+    versionSpec: $(PYTHON_VERSION)
+  displayName: 'Set Python Version'
 
 - script: |
     python -m pip install --upgrade pip
