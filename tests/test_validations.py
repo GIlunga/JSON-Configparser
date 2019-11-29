@@ -239,3 +239,17 @@ def test_float_value_int_arg(value, typedef, expected):
                                                      (1.5, type_defaults.TypeDefaultBounds("b", float), 1.5)])
 def test_int_value_float_arg(value, typedef, expected):
     assert expected == validations.validate_argument(value, typedef)
+
+
+@pytest.mark.parametrize("value,typedef", [(2.0,
+                                            type_defaults.TypeDefaultBounds("a", int,
+                                                                            bound_obj=bounds.Bounds("a", lower_bound=0,
+                                                                                                    upper_bound=1))),
+                                           (2, type_defaults.TypeDefaultBounds("a", float,
+                                                                               bound_obj=bounds.Bounds("a",
+                                                                                                       lower_bound=0,
+                                                                                                       upper_bound=1)))
+                                           ])
+def test_int_float_conversion_bound_check(value, typedef):
+    with pytest.raises(ValueError):
+        validations.validate_argument(value, typedef)
