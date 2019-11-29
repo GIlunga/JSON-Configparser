@@ -32,15 +32,16 @@ def validate_argument(arg_value: Any, arg_type_defaults: type_defaults.TypeDefau
         if not isinstance(arg_value, arg_type_defaults.type_):
             # Allow 10.0 for integer arguments
             if arg_type_defaults.type_ == int and isinstance(arg_value, float) and float(int(arg_value)) == arg_value:
-                return int(arg_value)
+                arg_value = int(arg_value)
             # Allow 10 for float arguments
             elif arg_type_defaults.type_ == float and isinstance(arg_value, int):
-                return float(arg_value)
+                arg_value = float(arg_value)
 
-            raise TypeError("The {name} argument should be a {type_} "
-                            "({name}: {value})".format(name=arg_type_defaults.arg_name,
-                                                       type_=arg_type_defaults.type_,
-                                                       value=arg_value))
+            else:
+                raise TypeError("The {name} argument should be a {type_} "
+                                "({name}: {value})".format(name=arg_type_defaults.arg_name,
+                                                           type_=arg_type_defaults.type_,
+                                                           value=arg_value))
         if arg_type_defaults.bound_obj is not None:
             arg_type_defaults.bound_obj.validate_value(arg_value)
 
