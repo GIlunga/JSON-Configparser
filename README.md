@@ -22,10 +22,5 @@ The examples folder contains examples of using this package.
 - Define options, including their types, bounds, extra validations, and defaults
 - Parse a configuration file, returning an object with attributes or a dictionary
 - All types, bounds, and defaults are validated by the package
-    
-## List of TODOs
-- Implement compatibility with 3.7 dataclasses
-- Improve tests
-- Improve function names
-- Improve the creation of Bounds
-- Allow command line interaction, e.g., when running a script pass the path to the json and new values for some arguments
+ 
+ Check the docs for help getting started: https://json-configparser.readthedocs.io/en/latest/getstarted.html.
